@@ -1,0 +1,733 @@
+exercises:
+  - id: BT01
+    version: 1
+    code: BT01
+    title: Làm quen 4 trục điều khiển
+    difficulty: Cơ bản
+    summary: Thực hành đẩy cần Ga, Tiến/Lùi (Pitch), Nghiêng ngang (Roll) và Quay về trung tâm với khoảng cách các cổng rộng 3.2m rõ ràng.
+    objectives:
+      - Tăng cần Ga (Throttle > 55%) để nâng UAV lên độ cao 1.4m
+      - Đẩy cần Pitch tiến thẳng 3.2m tới cổng phía trước (3.2, 0.0, 1.4)
+      - Đẩy cần Roll dịch ngang 3.2m sang cổng bên phải (3.2, -3.2, 1.4)
+      - Đưa UAV bay đường chéo 4.5m quay về giữ tại điểm trung tâm (0.0, 0.0, 1.4)
+    default_mode: position_hold
+    time_limit_sec: 100
+    corridor_radius: 0.72
+    start_pos: [0.0, 0.0, 0.05]
+    start_yaw: 0.0
+    environment:
+      wind_max: 0.0
+      gust_sigma: 0.0
+      map_preset: airbase
+      arena_bounds: [6.5, 6.5, 5.0]
+      speed_scale: 1.5
+      obstacles: []
+    stages:
+      - name: Cất cánh lên 1.4m
+        kind: reach
+        target: [0.0, 0.0, 1.4]
+        radius: 0.42
+        hold_sec: 0.4
+        hint: "Tăng cần Ga (Cần trái lên / W) để bay lên độ cao (0, 0, 1.4m)"
+      - name: Tiến thẳng trục Pitch (3.2m)
+        kind: reach
+        target: [3.2, 0.0, 1.4]
+        radius: 0.48
+        hold_sec: 0.4
+        hint: "Đẩy cần Pitch lên (Cần phải lên / Mũi tên Lên) tiến 3.2m tới cổng trước"
+      - name: Dịch ngang trục Roll (3.2m)
+        kind: reach
+        target: [3.2, -3.2, 1.4]
+        radius: 0.48
+        hold_sec: 0.4
+        hint: "Đẩy cần Roll sang phải (Cần phải sang phải / Mũi tên Phải) dịch 3.2m"
+      - name: Quay về trung tâm
+        kind: hold
+        target: [0.0, 0.0, 1.4]
+        radius: 0.48
+        hold_sec: 1.5
+        hint: "Đưa UAV về điểm trung tâm (0, 0, 1.4m) và giữ yên 1.5 giây"
+
+  - id: BT02
+    version: 1
+    code: BT02
+    title: Cất cánh & Giữ độ cao chuẩn
+    difficulty: Cơ bản
+    summary: Cất cánh thẳng đứng lên độ cao 1.8m và duy trì ổn định trong vùng sai số ±0.38m liên tục 5 giây trước khi hạ cánh.
+    objectives:
+      - Cất cánh mượt từ bệ phóng (0, 0, 0.05m) lên độ cao 1.8m
+      - Giữ độ cao chuẩn 1.8m liên tục trong 5 giây
+      - Hạ cánh nhẹ nhàng trở lại tâm bệ phóng
+    default_mode: position_hold
+    time_limit_sec: 80
+    corridor_radius: 0.55
+    start_pos: [0.0, 0.0, 0.05]
+    start_yaw: 0.0
+    environment:
+      wind_max: 0.15
+      gust_sigma: 0.05
+      map_preset: airbase
+      arena_bounds: [6.0, 6.0, 5.0]
+      obstacles: []
+    stages:
+      - name: Lên độ cao 1.8m
+        kind: reach
+        target: [0.0, 0.0, 1.8]
+        radius: 0.38
+        hold_sec: 0.0
+        hint: "Tăng cần Ga đưa UAV lên độ cao 1.8m"
+      - name: Giữ độ cao 1.8m (5s)
+        kind: hold
+        target: [0.0, 0.0, 1.8]
+        radius: 0.40
+        hold_sec: 5.0
+        hint: "Giữ cần Ga ở vị trí cân bằng (50%) để treo tại 1.8m trong 5 giây"
+      - name: Hạ cánh êm tại bệ
+        kind: land
+        target: [0.0, 0.0, 0.05]
+        radius: 0.42
+        max_landing_vz: 0.65
+        hint: "Giảm nhẹ cần Ga để hạ cánh êm xuống tâm bệ phóng"
+
+  - id: BT03
+    version: 1
+    code: BT03
+    title: Treo tại chỗ & Chuyển điểm neo (Gió nhẹ)
+    difficulty: Cơ bản
+    summary: Duy trì vị trí UAV tại Điểm treo A (1.6m) rồi bay vượt gió nhẹ 4.5m sang Điểm treo B và giữ ổn định 4 giây.
+    objectives:
+      - Bay lên điểm treo A (0.0, 0.0, 1.6m) và giữ ổn định 4 giây
+      - Dịch chuyển 4.5m sang điểm treo B (3.5, 2.8, 1.6m) và giữ ổn định 4 giây
+      - Chống trôi dạt do gió nền 0.35 m/s
+    default_mode: altitude_hold
+    time_limit_sec: 100
+    corridor_radius: 0.65
+    start_pos: [0.0, 0.0, 0.05]
+    start_yaw: 0.0
+    environment:
+      wind_max: 0.35
+      gust_sigma: 0.18
+      map_preset: airbase
+      arena_bounds: [6.5, 6.5, 5.0]
+      speed_scale: 1.4
+      obstacles: []
+    stages:
+      - name: Điểm treo A (4s)
+        kind: hold
+        target: [0.0, 0.0, 1.6]
+        radius: 0.44
+        hold_sec: 4.0
+        hint: "Giữ UAV ổn định trong vòng tròn A (0, 0, 1.6m) trong 4 giây"
+      - name: Điểm treo B cách 4.5m (4s)
+        kind: hold
+        target: [3.5, 2.8, 1.6]
+        radius: 0.48
+        hold_sec: 4.0
+        hint: "Bay 4.5m tới điểm treo B (3.5, 2.8, 1.6m) và giữ vị trí 4 giây ngược gió"
+
+  - id: BT04
+    version: 1
+    code: BT04
+    title: Bay theo hành lang Hình vuông (6m x 6m)
+    difficulty: Trung bình
+    summary: Điều khiển UAV bay khép kín qua 4 đỉnh hình vuông rộng 6.0m x 6.0m ở độ cao 1.6m với quỹ đạo thẳng và ổn định.
+    objectives:
+      - Duy trì độ cao 1.6m xuyên suốt 4 cạnh hình vuông dài 6.0m
+      - Lần lượt đi qua 4 cổng góc vuông với độ lệch hành lang nhỏ nhất
+      - Giữ thao tác cần mượt, tránh giật cục tại các góc cua 90 độ
+    default_mode: altitude_hold
+    time_limit_sec: 125
+    corridor_radius: 0.68
+    start_pos: [-3.0, -3.0, 0.05]
+    start_yaw: 0.0
+    environment:
+      wind_max: 0.20
+      gust_sigma: 0.10
+      map_preset: airbase
+      arena_bounds: [6.5, 6.5, 5.0]
+      speed_scale: 1.5
+      obstacles: []
+    stages:
+      - name: Cất cánh Đỉnh 1
+        kind: reach
+        target: [-3.0, -3.0, 1.6]
+        radius: 0.46
+        hint: "Cất cánh lên Đỉnh 1 (-3.0, -3.0, 1.6m)"
+      - name: Cạnh 1 (6m) -> Đỉnh 2
+        kind: reach
+        target: [3.0, -3.0, 1.6]
+        radius: 0.50
+        hint: "Bay thẳng 6m dọc hành lang tới Đỉnh 2 (3.0, -3.0, 1.6m)"
+      - name: Cạnh 2 (6m) -> Đỉnh 3
+        kind: reach
+        target: [3.0, 3.0, 1.6]
+        radius: 0.50
+        hint: "Rẽ trái 90 độ bay 6m tới Đỉnh 3 (3.0, 3.0, 1.6m)"
+      - name: Cạnh 3 (6m) -> Đỉnh 4
+        kind: reach
+        target: [-3.0, 3.0, 1.6]
+        radius: 0.50
+        hint: "Bay dọc cạnh 3 dài 6m tới Đỉnh 4 (-3.0, 3.0, 1.6m)"
+      - name: Khép vòng về Đỉnh 1
+        kind: hold
+        target: [-3.0, -3.0, 1.6]
+        radius: 0.50
+        hold_sec: 1.5
+        hint: "Khép kín hình vuông về Đỉnh 1 (-3.0, -3.0, 1.6m) và dừng 1.5s"
+
+  - id: BT05
+    version: 1
+    code: BT05
+    title: Bay quỹ đạo Hình số 8 (Sải rộng 8m)
+    difficulty: Trung bình
+    summary: Phối hợp đồng thời Roll và Pitch để dẫn UAV bay mượt qua chuỗi cổng lượn hình số 8 sải rộng 8.0m ở độ cao 1.6m.
+    objectives:
+      - Phối hợp nhịp nhàng 2 trục nghiêng để ôm cua hình số 8 rộng 8m
+      - Đi qua đầy đủ 9 cổng quỹ đạo liên hoàn
+      - Hạn chế tối đa hiện tượng chỉnh quá mức (Over-control)
+    default_mode: altitude_hold
+    time_limit_sec: 135
+    corridor_radius: 0.72
+    start_pos: [0.0, 0.0, 0.05]
+    start_yaw: 0.0
+    environment:
+      wind_max: 0.25
+      gust_sigma: 0.12
+      map_preset: airbase
+      arena_bounds: [6.5, 6.5, 5.0]
+      speed_scale: 1.6
+      obstacles: []
+    stages:
+      - name: Tâm xuất phát (1.6m)
+        kind: reach
+        target: [0.0, 0.0, 1.6]
+        radius: 0.45
+        hint: "Cất cánh lên tâm giao điểm (0, 0, 1.6m)"
+      - name: Vòng phải - Cổng 1
+        kind: reach
+        target: [2.2, -1.9, 1.6]
+        radius: 0.52
+        hint: "Lượn sang nhánh phải qua cổng (2.2, -1.9, 1.6m)"
+      - name: Vòng phải - Đỉnh xa (+4.0m)
+        kind: reach
+        target: [4.0, 0.0, 1.6]
+        radius: 0.52
+        hint: "Vòng qua đỉnh phải (4.0, 0.0, 1.6m)"
+      - name: Vòng phải - Cổng 2
+        kind: reach
+        target: [2.2, 1.9, 1.6]
+        radius: 0.52
+        hint: "Khép nhánh phải qua cổng (2.2, 1.9, 1.6m)"
+      - name: Qua tâm số 8
+        kind: reach
+        target: [0.0, 0.0, 1.6]
+        radius: 0.52
+        hint: "Cắt qua tâm (0, 0, 1.6m) để sang nhánh trái"
+      - name: Vòng trái - Cổng 3
+        kind: reach
+        target: [-2.2, -1.9, 1.6]
+        radius: 0.52
+        hint: "Lượn sang nhánh trái qua cổng (-2.2, -1.9, 1.6m)"
+      - name: Vòng trái - Đỉnh xa (-4.0m)
+        kind: reach
+        target: [-4.0, 0.0, 1.6]
+        radius: 0.52
+        hint: "Vòng qua đỉnh trái (-4.0, 0.0, 1.6m)"
+      - name: Vòng trái - Cổng 4
+        kind: reach
+        target: [-2.2, 1.9, 1.6]
+        radius: 0.52
+        hint: "Khép nhánh trái qua cổng (-2.2, 1.9, 1.6m)"
+      - name: Về tâm kết thúc
+        kind: hold
+        target: [0.0, 0.0, 1.6]
+        radius: 0.50
+        hold_sec: 1.5
+        hint: "Hoàn thành số 8 tại tâm (0, 0, 1.6m) và giữ 1.5s"
+
+  - id: BT06
+    version: 1
+    code: BT06
+    title: Tiếp cận & Hạ cánh Chính xác (Cự ly 5.5m)
+    difficulty: Trung bình
+    summary: Đưa UAV từ điểm xuất phát cách bãi đáp 5.5m bay theo đường trượt tiếp cận (Glide-slope) về tâm chữ H và chạm đất êm.
+    objectives:
+      - Cất cánh từ điểm xa (-4.5, 3.0, 0.05m) lên độ cao hành trình 2.0m
+      - Bay qua cổng tiếp cận trung gian (-2.2, 1.5, 1.6m) rồi treo trên bãi đáp (0.0, 0.0, 1.1m)
+      - Giảm độ cao có kiểm soát, chạm đất trong bán kính 0.38m với |vz| < 0.55 m/s
+    default_mode: altitude_hold
+    time_limit_sec: 110
+    corridor_radius: 0.65
+    start_pos: [-4.5, 3.0, 0.05]
+    start_yaw: 0.0
+    environment:
+      wind_max: 0.30
+      gust_sigma: 0.15
+      map_preset: airbase
+      arena_bounds: [6.5, 6.5, 5.0]
+      speed_scale: 1.5
+      obstacles: []
+    stages:
+      - name: Lên độ cao hành trình (2.0m)
+        kind: reach
+        target: [-4.5, 3.0, 2.0]
+        radius: 0.48
+        hint: "Cất cánh lên độ cao hành trình (-4.5, 3.0, 2.0m)"
+      - name: Cổng tiếp cận trung gian
+        kind: reach
+        target: [-2.2, 1.5, 1.6]
+        radius: 0.48
+        hint: "Hạ dần độ cao qua cổng tiếp cận (-2.2, 1.5, 1.6m)"
+      - name: Điểm treo trên bãi đáp
+        kind: hold
+        target: [0.0, 0.0, 1.1]
+        radius: 0.42
+        hold_sec: 1.5
+        hint: "Tiến vào ngay trên bãi đáp (0, 0, 1.1m) và giữ ổn định 1.5s"
+      - name: Chạm đất chính xác
+        kind: land
+        target: [0.0, 0.0, 0.05]
+        radius: 0.38
+        max_landing_vz: 0.55
+        hint: "Hạ ga từ từ để chạm đất êm tại tâm chữ H (0, 0)"
+
+  - id: BT07
+    version: 1
+    code: BT07
+    title: Xử trí Gió giật & Né Chướng ngại vật
+    difficulty: Nâng cao
+    summary: Điều khiển UAV vượt qua hành lang dài 8.4m có 4 cột trụ chướng ngại vật dưới tác động của gió giật Ornstein-Uhlenbeck.
+    objectives:
+      - Bù góc nghiêng chủ động trước gió giật (wind_max 0.65 m/s, gust 0.40 m/s)
+      - Luồn lách an toàn qua 4 cột trụ cách đều trên hành lang 8.4m
+      - Không va chạm cột và về đích an toàn
+    default_mode: altitude_hold
+    time_limit_sec: 130
+    corridor_radius: 0.78
+    start_pos: [-4.2, 0.0, 0.05]
+    start_yaw: 0.0
+    environment:
+      wind_max: 0.65
+      gust_sigma: 0.40
+      map_preset: forest
+      arena_bounds: [6.5, 6.5, 5.0]
+      speed_scale: 1.5
+      obstacles:
+        - {x: -1.8, y: 0.0, r: 0.24, h: 2.8}
+        - {x: 0.3, y: 1.25, r: 0.24, h: 2.8}
+        - {x: 0.3, y: -1.25, r: 0.24, h: 2.8}
+        - {x: 2.4, y: 0.0, r: 0.24, h: 2.8}
+    stages:
+      - name: Cất cánh đầu hành lang
+        kind: reach
+        target: [-4.2, 0.0, 1.5]
+        radius: 0.48
+        hint: "Cất cánh lên (-4.2, 0.0, 1.5m) chuẩn bị vượt chướng ngại vật"
+      - name: Né cột 1 sang trái
+        kind: reach
+        target: [-1.8, 1.5, 1.5]
+        radius: 0.52
+        hint: "Lách sang trái cột trụ 1 qua cổng (-1.8, 1.5, 1.5m)"
+      - name: Luồn khe giữa cột 2 & 3
+        kind: reach
+        target: [0.3, 0.0, 1.5]
+        radius: 0.48
+        hint: "Bay qua khe giữa 2 cột trụ tại (0.3, 0.0, 1.5m)"
+      - name: Né cột 4 sang phải
+        kind: reach
+        target: [2.4, -1.5, 1.5]
+        radius: 0.52
+        hint: "Lách sang phải cột trụ 4 qua cổng (2.4, -1.5, 1.5m)"
+      - name: Giữ vị trí tại đích
+        kind: hold
+        target: [4.2, 0.0, 1.5]
+        radius: 0.48
+        hold_sec: 2.0
+        hint: "Tiến về đích (4.2, 0.0, 1.5m) và giữ ổn định 2 giây trong gió giật"
+
+  - id: BT08
+    version: 1
+    code: BT08
+    title: Kiểm tra Tổng hợp Cuối khóa
+    difficulty: Sát hạch
+    summary: "Bài thi tổng hợp trên sân rộng 8m x 6m: Cất cánh -> Bay hành lang né cột trong gió -> Treo điểm chuẩn -> Hạ cánh chính xác."
+    objectives:
+      - Hoàn thành toàn bộ chuỗi 6 giai đoạn sát hạch không va chạm
+      - Duy trì độ chính xác quỹ đạo và thao tác cần mượt mà
+      - Hạ cánh chuẩn xác tại tâm bãi đáp (0, 0) cuối bài thi
+    default_mode: altitude_hold
+    time_limit_sec: 160
+    corridor_radius: 0.75
+    start_pos: [-4.0, -3.0, 0.05]
+    start_yaw: 0.0
+    environment:
+      wind_max: 0.45
+      gust_sigma: 0.25
+      map_preset: tactical
+      arena_bounds: [6.5, 6.5, 5.0]
+      speed_scale: 1.6
+      obstacles:
+        - {x: -1.0, y: -2.6, r: 0.24, h: 2.8}
+        - {x: 2.2, y: -0.2, r: 0.24, h: 2.8}
+        - {x: -1.0, y: 2.0, r: 0.24, h: 2.8}
+    stages:
+      - name: Cất cánh điểm xuất phát
+        kind: reach
+        target: [-4.0, -3.0, 1.6]
+        radius: 0.48
+        hint: "Giai đoạn 1: Cất cánh lên (-4.0, -3.0, 1.6m)"
+      - name: Vượt cột phía Nam
+        kind: reach
+        target: [2.0, -3.0, 1.6]
+        radius: 0.52
+        hint: "Giai đoạn 2: Bay 6m vượt cột phía Nam tới cổng (2.0, -3.0, 1.6m)"
+      - name: Vòng qua cổng phía Đông
+        kind: reach
+        target: [3.8, 1.6, 1.6]
+        radius: 0.52
+        hint: "Giai đoạn 3: Vòng qua cột Đông tới cổng (3.8, 1.6, 1.6m)"
+      - name: Treo định vị phía Bắc (3s)
+        kind: hold
+        target: [0.0, 2.8, 1.5]
+        radius: 0.46
+        hold_sec: 3.0
+        hint: "Giai đoạn 4: Giữ vị trí tại (0.0, 2.8, 1.5m) trong 3 giây"
+      - name: Tiếp cận trên bãi đáp
+        kind: reach
+        target: [0.0, 0.0, 1.1]
+        radius: 0.45
+        hint: "Giai đoạn 5a: Đưa UAV về trên tâm bãi đáp (0.0, 0.0, 1.1m)"
+      - name: Hạ cánh sát hạch
+        kind: land
+        target: [0.0, 0.0, 0.05]
+        radius: 0.40
+        max_landing_vz: 0.60
+        hint: "Giai đoạn 5b: Hạ cánh chính xác xuống tâm bãi đáp (0, 0)"
+
+  - id: BT09
+    version: 1
+    code: BT09
+    title: Bay Luồn Rừng Cây Thực Địa
+    difficulty: Nâng cao
+    summary: "Bay xuyên tuyến đường mòn dài trong rừng cây 3D mật độ cao (48 cây có tán va chạm thật), vượt đỉnh tán cây thấp và đáp tại bãi trống tiền phương."
+    objectives:
+      - Điều khiển UAV luồn lách qua chuỗi cây cổ thụ trong rừng không chạm thân và tán lá
+      - Nâng độ cao lên 3.2m để vượt qua dải tán cây chắn ngang đường mòn
+      - Hạ độ cao tiếp cận và đáp chính xác tại bãi trống phía Đông (+8.0, 0.0)
+    default_mode: position_hold
+    time_limit_sec: 160
+    corridor_radius: 0.85
+    start_pos: [-8.0, 0.0, 0.05]
+    start_yaw: 0.0
+    environment:
+      wind_max: 0.30
+      gust_sigma: 0.18
+      map_preset: forest
+      arena_bounds: [12.0, 9.0, 7.5]
+      speed_scale: 1.8
+      forest_generator:
+        x_min: -10.5
+        x_max: 10.5
+        y_min: -7.5
+        y_max: 7.5
+        count: 42
+        clearance: 1.45
+        seed: 209
+      obstacles:
+        - {x: -5.2, y: 0.9, r: 0.18, h: 3.6, kind: tree, crown_r: 0.58}
+        - {x: -2.5, y: -0.9, r: 0.19, h: 3.8, kind: tree, crown_r: 0.60}
+        - {x: 0.2, y: 0.0, r: 0.18, h: 2.3, kind: tree, crown_r: 0.55}
+        - {x: 2.8, y: 1.0, r: 0.20, h: 3.9, kind: tree, crown_r: 0.62}
+        - {x: 5.2, y: -0.8, r: 0.18, h: 3.5, kind: tree, crown_r: 0.56}
+        - {x: 6.5, y: 1.2, r: 0.17, h: 3.4, kind: tree, crown_r: 0.55}
+    stages:
+      - name: Cất cánh bìa rừng Tây
+        kind: reach
+        target: [-8.0, 0.0, 1.5]
+        radius: 0.50
+        hint: "Tăng cần Ga cất cánh tại bìa rừng Tây lên độ cao 1.5m"
+      - name: Luồn cụm cây số 1
+        kind: reach
+        target: [-4.8, -1.2, 1.5]
+        radius: 0.55
+        hint: "Lách sang phải né tán cây cổ thụ đầu tiên tới (-4.8, -1.2, 1.5m)"
+      - name: Chuyển làn đường mòn
+        kind: reach
+        target: [-1.8, 1.2, 1.6]
+        radius: 0.55
+        hint: "Lượn sang trái qua khe rừng tới (-1.8, 1.2, 1.6m)"
+      - name: Vượt đỉnh tán cây thấp (3.2m)
+        kind: reach
+        target: [0.4, 0.0, 3.2]
+        radius: 0.55
+        hint: "Tăng độ cao lên 3.2m để bay vọt qua trên đỉnh tán cây chắn giữa đường"
+      - name: Hạ xuống khe rừng Đông
+        kind: reach
+        target: [3.6, -1.1, 1.6]
+        radius: 0.55
+        hint: "Hạ độ cao xuống 1.6m và luồn qua cụm cây phía Đông (3.6, -1.1, 1.6m)"
+      - name: Tiếp cận bãi trống
+        kind: reach
+        target: [8.0, 0.0, 1.1]
+        radius: 0.50
+        hint: "Tiến ra bãi trống tiền phương (8.0, 0.0, 1.1m)"
+      - name: Hạ cánh bãi trống bìa rừng
+        kind: land
+        target: [8.0, 0.0, 0.05]
+        radius: 0.48
+        max_landing_vz: 0.65
+        hint: "Hạ cánh êm xuống bãi đáp bìa rừng Đông (8.0, 0.0)"
+
+  - id: BT10
+    version: 1
+    code: BT10
+    title: Bay Hẻm Đô Thị & Đáp Nóc Tòa Nhà
+    difficulty: Nâng cao
+    summary: "Bay luồn qua hẻm phố hẹp giữa các tòa nhà cao tầng 3D có va chạm vật lý, vượt tháp đôi và hạ cánh chính xác lên bãi đáp trên nóc Tòa nhà Chỉ huy (cao 2.6m)."
+    objectives:
+      - Điều khiển UAV bay dọc đại lộ và luồn qua khe hẹp giữa các tòa nhà cao tầng
+      - Kiểm soát độ cao để leo lên trên cao độ nóc tòa nhà (3.6m)
+      - Hạ cánh chính xác trực tiếp lên bãi đáp H trên nóc Tòa nhà Chỉ huy (+6.5, +2.0, 2.64m)
+    default_mode: position_hold
+    time_limit_sec: 165
+    corridor_radius: 0.85
+    start_pos: [-8.0, -2.5, 0.05]
+    start_yaw: 0.0
+    environment:
+      wind_max: 0.35
+      gust_sigma: 0.22
+      map_preset: landmark81
+      arena_bounds: [12.5, 9.5, 8.5]
+      speed_scale: 1.8
+      obstacles:
+        - {x: -4.5, y: 0.5, r: 0.9, h: 4.6, kind: building, sx: 2.0, sy: 2.0}
+        - {x: -4.5, y: -5.2, r: 0.9, h: 3.8, kind: building, sx: 2.2, sy: 1.8}
+        - {x: -0.5, y: 2.4, r: 1.0, h: 5.4, kind: building, sx: 2.2, sy: 2.0}
+        - {x: -0.5, y: -1.8, r: 1.0, h: 5.2, kind: building, sx: 2.2, sy: 2.0}
+        - {x: 3.2, y: -3.2, r: 0.9, h: 4.2, kind: building, sx: 2.0, sy: 2.0}
+        - {x: 3.2, y: 4.2, r: 0.9, h: 4.8, kind: building, sx: 2.2, sy: 2.0}
+        - {x: 6.5, y: 2.0, r: 1.3, h: 2.6, kind: building, sx: 2.6, sy: 2.6}
+    stages:
+      - name: Cất cánh Quảng trường Tây
+        kind: reach
+        target: [-8.0, -2.5, 1.8]
+        radius: 0.50
+        hint: "Cất cánh từ quảng trường lên độ cao 1.8m"
+      - name: Tiến vào Đại lộ Nam
+        kind: reach
+        target: [-4.5, -2.4, 1.8]
+        radius: 0.55
+        hint: "Bay dọc giữa hai khối nhà đầu tiên tới (-4.5, -2.4, 1.8m)"
+      - name: Chui qua Khe Tháp Đôi
+        kind: reach
+        target: [-0.5, 0.3, 2.0]
+        radius: 0.55
+        hint: "Điều khiển chính xác qua khe hẹp giữa Tháp Đôi tới (-0.5, 0.3, 2.0m)"
+      - name: Vượt lên Tầng Không Đô Thị
+        kind: reach
+        target: [3.2, 0.8, 3.6]
+        radius: 0.55
+        hint: "Tăng độ cao lên 3.6m vượt trên cao độ các tòa nhà thấp"
+      - name: Tiếp cận Nóc Tòa Nhà Chỉ Huy
+        kind: reach
+        target: [6.5, 2.0, 3.5]
+        radius: 0.50
+        hint: "Di chuyển vào tâm bãi đáp trên nóc Tòa nhà Chỉ huy (6.5, 2.0, 3.5m)"
+      - name: Hạ cánh trên Nóc Tòa Nhà (Cao 2.6m)
+        kind: land
+        target: [6.5, 2.0, 2.64]
+        radius: 0.52
+        max_landing_vz: 0.65
+        hint: "Hạ nhẹ cần Ga để đáp trực tiếp lên sàn sân đỗ nóc tòa nhà (Z = 2.64m)"
+
+  - id: BT11
+    version: 1
+    code: BT11
+    title: Tuần Tra Liên Hợp Thực Địa Dài
+    difficulty: Sát hạch
+    summary: "Chiến dịch bay đường dài (~40m) xuyên 3 phân khu: Cất cánh Căn cứ -> Luồn rừng cây -> Bay trinh sát cao độ 3.8m -> Vượt khu nhà cao tầng -> Hạ cánh về đích."
+    objectives:
+      - Hoàn thành hành trình tuần tra liên hợp 7 mốc qua cả địa hình Rừng cây và Tòa nhà đô thị
+      - Giữ ổn định điểm treo trinh sát trên cao (Z = 3.8m) trong 3 giây dưới gió giật
+      - Đưa UAV vượt khu phố về hạ cánh an toàn tại Căn cứ Tiền phương
+    default_mode: position_hold
+    time_limit_sec: 210
+    corridor_radius: 0.90
+    start_pos: [-10.0, -4.0, 0.05]
+    start_yaw: 0.0
+    environment:
+      wind_max: 0.40
+      gust_sigma: 0.25
+      map_preset: forest
+      arena_bounds: [14.0, 10.0, 9.0]
+      speed_scale: 2.0
+      forest_generator:
+        x_min: -11.5
+        x_max: 1.5
+        y_min: -7.5
+        y_max: 7.5
+        count: 26
+        clearance: 1.50
+        seed: 311
+      obstacles:
+        - {x: -6.5, y: -1.5, r: 0.18, h: 3.5, kind: tree, crown_r: 0.55}
+        - {x: -3.2, y: 1.2, r: 0.19, h: 3.8, kind: tree, crown_r: 0.58}
+        - {x: 3.5, y: 1.8, r: 0.9, h: 4.8, kind: building, sx: 2.0, sy: 2.0}
+        - {x: 3.5, y: -2.4, r: 0.9, h: 4.5, kind: building, sx: 2.0, sy: 2.0}
+        - {x: 7.2, y: 2.2, r: 1.0, h: 5.2, kind: building, sx: 2.2, sy: 2.0}
+        - {x: 7.2, y: -2.0, r: 0.9, h: 3.8, kind: building, sx: 2.0, sy: 1.8}
+    stages:
+      - name: Cất cánh Căn cứ Tây Nam
+        kind: reach
+        target: [-10.0, -4.0, 1.8]
+        radius: 0.55
+        hint: "Giai đoạn 1: Cất cánh lên độ cao tuần tra 1.8m"
+      - name: Xuyên Phân khu Rừng Nam
+        kind: reach
+        target: [-5.5, 0.8, 1.8]
+        radius: 0.60
+        hint: "Giai đoạn 2: Bay xuyên qua phân khu rừng cây tới (-5.5, 0.8, 1.8m)"
+      - name: Điểm Treo Trinh sát Trên Cao (3s)
+        kind: hold
+        target: [-1.0, -0.5, 3.8]
+        radius: 0.55
+        hold_sec: 3.0
+        hint: "Giai đoạn 3: Leo lên độ cao 3.8m và giữ vị trí trinh sát 3 giây"
+      - name: Tiến vào Cửa ngõ Khu Đô thị
+        kind: reach
+        target: [3.5, -0.3, 2.2]
+        radius: 0.58
+        hint: "Giai đoạn 4: Hạ xuống 2.2m và bay vào khe giữa hai tòa nhà (3.5, -0.3, 2.2m)"
+      - name: Vượt Đại lộ Đông
+        kind: reach
+        target: [7.2, 0.1, 2.2]
+        radius: 0.58
+        hint: "Giai đoạn 5: Bay dọc đại lộ giữa khối nhà cao tầng tới (7.2, 0.1, 2.2m)"
+      - name: Tiếp cận Bãi đáp Tiền phương
+        kind: reach
+        target: [10.0, 0.0, 1.1]
+        radius: 0.52
+        hint: "Giai đoạn 6: Đưa UAV ra bãi đáp phía Đông (10.0, 0.0, 1.1m)"
+      - name: Hạ cánh Hoàn thành Chiến dịch
+        kind: land
+        target: [10.0, 0.0, 0.05]
+        radius: 0.48
+        max_landing_vz: 0.65
+        hint: "Giai đoạn 7: Hạ cánh chuẩn xác xuống tâm bãi đáp (10.0, 0.0)"
+
+  - id: BT12
+    version: 1
+    code: BT12
+    title: Tuần Tra Đô Thị Landmark 81 & Ven Sông
+    difficulty: Nâng cao
+    summary: "Bay tuần tra qua đại lộ khu đô thị Digital Twin Landmark 81, luồn lách giữa các tòa tháp kính 3D, treo quan sát bờ sông Sài Gòn và hạ cánh tại Bến Du Thuyền."
+    objectives:
+      - Điều khiển UAV xuyên qua hành lang đại lộ giữa các tòa cao ốc kính phản chiếu
+      - Giữ vị trí trinh sát ổn định trên cao độ 3.4m hướng ra Sông Sài Gòn trong 2 giây
+      - Hạ cánh chính xác xuống bãi đáp Bến Du Thuyền (+9.5, +2.5)
+    default_mode: position_hold
+    time_limit_sec: 180
+    corridor_radius: 0.85
+    start_pos: [-8.0, -2.5, 0.05]
+    start_yaw: 0.0
+    environment:
+      wind_max: 0.35
+      gust_sigma: 0.20
+      map_preset: landmark81
+      arena_bounds: [14.0, 10.0, 9.0]
+      speed_scale: 2.0
+      obstacles:
+        - {x: -4.0, y: 0.5, r: 1.0, h: 5.2, kind: building, sx: 2.2, sy: 2.0}
+        - {x: -4.0, y: -5.8, r: 1.0, h: 4.5, kind: building, sx: 2.2, sy: 2.0}
+        - {x: 1.5, y: 3.2, r: 1.0, h: 5.8, kind: building, sx: 2.2, sy: 2.2}
+        - {x: 1.5, y: -3.2, r: 1.0, h: 5.4, kind: building, sx: 2.2, sy: 2.2}
+        - {x: 6.0, y: -3.8, r: 1.0, h: 4.8, kind: building, sx: 2.2, sy: 2.0}
+    stages:
+      - name: Cất cánh Quảng trường Nội khu
+        kind: reach
+        target: [-8.0, -2.5, 1.8]
+        radius: 0.55
+        hint: "Cất cánh từ quảng trường nội khu lên độ cao 1.8m"
+      - name: Tiến vào Đại lộ Central Park
+        kind: reach
+        target: [-4.0, -2.5, 2.0]
+        radius: 0.58
+        hint: "Bay dọc đại lộ giữa hai tòa tháp đầu tiên tới (-4.0, -2.5, 2.0m)"
+      - name: Vượt Cổng Tháp Đôi Kính
+        kind: reach
+        target: [1.5, 0.0, 2.4]
+        radius: 0.58
+        hint: "Luồn qua khe giữa hai tòa cao ốc trung tâm tới (1.5, 0.0, 2.4m)"
+      - name: Điểm Treo Quan Sát Sông Sài Gòn (2s)
+        kind: hold
+        target: [5.5, 0.5, 2.4]
+        radius: 0.58
+        hold_sec: 1.5
+        hint: "Treo ổn định ở cao độ 2.4m quan sát bến sông Sài Gòn"
+      - name: Tiếp cận Bãi đáp Bến Du Thuyền
+        kind: reach
+        target: [8.0, 1.0, 1.0]
+        radius: 0.55
+        hint: "Hạ độ cao xuống 1.0m tiến về bãi đáp ven sông (8.0, 1.0)"
+      - name: Hạ cánh Bến Du Thuyền
+        kind: land
+        target: [8.0, 1.0, 0.05]
+        radius: 0.50
+        max_landing_vz: 0.65
+        hint: "Hạ cánh êm xuống tâm bãi đáp ven sông (8.0, 1.0)"
+
+  - id: BT13
+    version: 1
+    code: BT13
+    title: Hạ Cánh Khẩn Cấp Trên Helipad Nóc Cao Ốc
+    difficulty: Sát hạch
+    summary: "Bài sát hạch đô thị nâng cao: Cất cánh từ mặt đất, vượt qua khe gió giật giữa hai tòa tháp cao tầng, leo lên cao độ 4.2m và đáp chính xác xuống Helipad chữ H trên nóc Tòa Tháp Tài Chính (cao 3.2m)."
+    objectives:
+      - Kiểm soát UAV vượt qua hành lang hẹp giữa hai tòa cao ốc 5.5m
+      - Tăng độ cao chuẩn xác lên tầng không 4.2m để vượt đỉnh tòa tháp
+      - Căn tâm chữ H và đáp trực tiếp lên sàn Helipad nóc Tòa Tháp Tài Chính (+6.8, 0.0, 3.24m)
+    default_mode: position_hold
+    time_limit_sec: 165
+    corridor_radius: 0.85
+    start_pos: [-7.5, 0.0, 0.05]
+    start_yaw: 0.0
+    environment:
+      wind_max: 0.40
+      gust_sigma: 0.24
+      map_preset: landmark81
+      arena_bounds: [13.5, 9.5, 9.0]
+      speed_scale: 2.0
+      obstacles:
+        - {x: -2.5, y: 2.8, r: 1.0, h: 5.5, kind: building, sx: 2.2, sy: 2.2}
+        - {x: -2.5, y: -2.8, r: 1.0, h: 5.5, kind: building, sx: 2.2, sy: 2.2}
+        - {x: 2.2, y: 3.2, r: 1.0, h: 4.8, kind: building, sx: 2.0, sy: 2.0}
+        - {x: 2.2, y: -3.2, r: 1.0, h: 4.8, kind: building, sx: 2.0, sy: 2.0}
+        - {x: 6.5, y: 0.0, r: 1.3, h: 2.6, kind: building, sx: 2.6, sy: 2.6}
+    stages:
+      - name: Cất cánh Sân Quảng Trường
+        kind: reach
+        target: [-7.5, 0.0, 2.0]
+        radius: 0.52
+        hint: "Cất cánh thẳng đứng lên độ cao 2.0m"
+      - name: Xuyên Khe Gió Tháp Đôi
+        kind: reach
+        target: [-2.5, 0.0, 2.2]
+        radius: 0.55
+        hint: "Bay qua khe giữa hai tòa tháp 5.5m tới (-2.5, 0.0, 2.2m)"
+      - name: Leo Lên Tầng Không Tiếp Cận (3.6m)
+        kind: reach
+        target: [2.5, 0.0, 3.6]
+        radius: 0.55
+        hint: "Tăng độ cao lên 3.6m vượt cao hơn mặt nóc tòa nhà đích"
+      - name: Căn Tâm Helipad Nóc Tòa Tháp
+        kind: reach
+        target: [6.5, 0.0, 3.5]
+        radius: 0.50
+        hint: "Tiến vào đúng tâm chữ H phía trên nóc Tòa Tháp Tài Chính (6.5, 0.0, 3.5m)"
+      - name: Đáp Xuống Helipad Sân Thượng (Cao 2.6m)
+        kind: land
+        target: [6.5, 0.0, 2.64]
+        radius: 0.52
+        max_landing_vz: 0.65
+        hint: "Hạ nhẹ cần Ga để đáp êm xuống sàn Helipad trên nóc tòa tháp (Z = 2.64m)"
+

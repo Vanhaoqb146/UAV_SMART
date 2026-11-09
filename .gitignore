@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+env/
+engine/.venv/
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Node / Frontend
+node_modules/
+app/node_modules/
+dist/
+app/dist/
+.vite/
+app/.vite/
+*.tsbuildinfo
+
+# Logs & Temp
+*.log
+*.tmp
+
+# Runtime Data & Sessions
+data/sessions/*
+!data/sessions/.gitkeep
+data/*.db
+data/*.db-journal
+data/*.db-wal
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
